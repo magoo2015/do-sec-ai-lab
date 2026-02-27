@@ -1,0 +1,14 @@
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/terraform.tfvars
+**/.terraform.lock.hcl.backup
+
+# Secrets / env files
+.env
+*.pem
+*.ppk
+
+# macOS
+.DS_Store

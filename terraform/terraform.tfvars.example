@@ -1,0 +1,6 @@
+do_token         = "YOUR_DO_TOKEN"
+ssh_key_name     = "YOUR_DO_SSH_KEY_NAME"
+allowed_ssh_cidr = "YOUR_PUBLIC_IP/32"
+vpc_cidr         = "10.20.0.0/16"
+region           = "nyc3"
+project_name     = "do-sec-ai-lab"
