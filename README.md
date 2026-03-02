@@ -267,6 +267,39 @@ Automation-first security operations
 
 Foundation for AI-assisted SOC tooling
 
+Phase 2 – Bastion Control Plane & Node Hardening
+Architecture
+
+Bastion: Public entry point
+
+Web-1, Web-2: Private nodes
+
+AI Node: Private SOC automation host
+
+VPC CIDR: 10.20.0.0/16
+
+Security Controls Implemented
+
+Dedicated Bastion automation SSH key
+
+Ansible managed infrastructure
+
+Non-root automation user (sysadmin)
+
+UFW host-level firewall
+
+Fail2ban intrusion protection
+
+Unattended security updates
+
+SSH password authentication disabled
+
+Root SSH login disabled (break-glass via DO console)
+
+Operational Model
+
+Windows → Bastion → Private Nodes
+
 🧑‍💻 Author
 
 Sydney McGee
