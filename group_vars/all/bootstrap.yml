@@ -1,0 +1,18 @@
+sysadmin_user: sysadmin
+# Paste your admin public key below (OpenSSH format)
+sysadmin_pubkey: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPhrzpdmAUnwwAlUSwgqEyO5uWDxHJIgfsE5b0lP1Jgh ed25519-key-20260116"
+
+baseline_packages:
+  - ufw
+  - fail2ban
+  - unattended-upgrades
+  - ca-certificates
+  - curl
+  - wget
+  - jq
+  - git
+  - rsync
+  - python3
+  - python3-pip
+  - auditd
+  - chrony

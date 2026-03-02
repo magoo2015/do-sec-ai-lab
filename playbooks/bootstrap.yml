@@ -1,0 +1,77 @@
+---
+- name: Bootstrap private nodes (baseline packages + sysadmin)
+  hosts: private_nodes
+  become: true
+  vars_files:
+    - ../group_vars/all/bootstrap.yml
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install baseline packages
+      ansible.builtin.apt:
+        name: "{{ baseline_packages }}"
+        state: present
+
+    - name: Ensure sysadmin user exists
+      ansible.builtin.user:
+        name: "{{ sysadmin_user }}"
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+        create_home: yes
+        state: present
+
+    - name: Add SSH key for sysadmin
+      ansible.posix.authorized_key:
+        user: "{{ sysadmin_user }}"
+        key: "{{ sysadmin_pubkey }}"
+        state: present
+
+    - name: Configure passwordless sudo for sysadmin (temporary for lab speed)
+      ansible.builtin.copy:
+        dest: "/etc/sudoers.d/{{ sysadmin_user }}"
+        content: "{{ sysadmin_user }} ALL=(ALL) NOPASSWD:ALL\n"
+        owner: root
+        group: root
+        mode: "0440"
+
+    - name: Enable and start fail2ban
+      ansible.builtin.service:
+        name: fail2ban
+        enabled: yes
+        state: started
+
+    - name: Enable unattended upgrades
+      ansible.builtin.copy:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        content: |
+          APT::Periodic::Update-Package-Lists "1";
+          APT::Periodic::Unattended-Upgrade "1";
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Enable UFW deny-by-default
+      community.general.ufw:
+        state: enabled
+        policy: deny
+
+    - name: Allow SSH in UFW
+      community.general.ufw:
+        rule: allow
+        name: OpenSSH
+
+    - name: Disable SSH password authentication (keep root enabled for now)
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication\s+'
+        line: 'PasswordAuthentication no'
+
+    - name: Restart SSH service
+      ansible.builtin.service:
+        name: ssh
+        state: restarted

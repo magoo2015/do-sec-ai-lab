@@ -1,0 +1,21 @@
+---
+- name: Allow Bastion automation key for sysadmin
+  hosts: private_nodes
+  become: true
+  vars:
+    sysadmin_user: sysadmin
+
+  # Read the public key from the Ansible controller (Bastion), not from targets
+  pre_tasks:
+    - name: Read bastion public key (controller)
+      ansible.builtin.set_fact:
+        bastion_pubkey: "{{ lookup('ansible.builtin.file', lookup('ansible.builtin.env', 'HOME') + '/.ssh/id_ed25519_ansible.pub') }}"
+      delegate_to: localhost
+      run_once: true
+
+  tasks:
+    - name: Add bastion automation key to sysadmin authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ sysadmin_user }}"
+        key: "{{ bastion_pubkey }}"
+        state: present
