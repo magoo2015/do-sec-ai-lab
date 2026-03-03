@@ -300,6 +300,28 @@ Operational Model
 
 Windows → Bastion → Private Nodes
 
+Phase 3 — SOC Assistant (FastAPI)
+
+Host: ai-node (10.20.0.13)
+
+Service: soc-assistant.service (systemd)
+
+API: http://10.20.0.13:8000 (VPC-only; restricted by UFW)
+
+Endpoints:
+
+GET /health
+
+POST /triage (structured JSON)
+
+Operations
+
+Status: sudo systemctl status soc-assistant --no-pager
+
+Logs: sudo journalctl -u soc-assistant -n 50 --no-pager
+
+Restart: sudo systemctl restart soc-assistant
+
 🧑‍💻 Author
 
 Sydney McGee
