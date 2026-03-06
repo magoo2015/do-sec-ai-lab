@@ -202,6 +202,36 @@ Wazuh integration
 
 Real telemetry from workload nodes
 
+## Project Status
+
+**Status:** Closed / Archived
+
+This project was a private DigitalOcean cloud security lab built to explore:
+- Bastion-based administration
+- Private VPC segmentation
+- Ansible-managed Linux hardening
+- A private FastAPI-based SOC assistant on an internal AI node
+- A CLI-based workflow for security alert triage
+
+The lab successfully demonstrated:
+- Bastion-only access to private nodes
+- Ansible control from the bastion host
+- Hardened Ubuntu hosts with UFW, fail2ban, unattended-upgrades, and auditd
+- Internal-only SOC Assistant API on the AI node
+- Working SOC CLI commands for health checks and alert triage
+
+### Why this project was closed
+
+I decided to move on to other learning priorities.  
+This repository remains as a portfolio and learning artifact showing the architecture, automation approach, and early AI-assisted SOC workflow design.
+
+### Key Lessons Learned
+
+- Bastion-first design is a practical way to manage private cloud resources securely
+- Ansible is effective for repeatable baseline hardening
+- Separating infrastructure, control plane, and analyst tooling keeps the design maintainable
+- Building useful AI security tooling requires strong schema design and workflow clarity before adding advanced LLM features
+
 🧑‍💻 Author
 
 Sydney McGee
