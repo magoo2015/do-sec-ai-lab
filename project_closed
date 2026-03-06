@@ -1,0 +1,18 @@
+# Project Closure Note
+
+This lab was archived after reaching a stable proof-of-concept stage.
+
+## Final State
+- DigitalOcean private VPC lab with bastion, two web nodes, and one AI node
+- Bastion used as control plane and Ansible management host
+- Private FastAPI SOC assistant deployed on the AI node
+- SOC CLI on bastion supported health checks and alert triage workflows
+
+## Reason for Closure
+The project met its initial learning goals, and I decided to shift focus to other projects.
+
+## What I Would Improve Next Time
+- Standardized triage response schema
+- More realistic telemetry ingestion
+- Dedicated `/explain`, `/hunt`, and `/note` API endpoints
+- Optional private LLM/RAG architecture after deterministic triage maturity
