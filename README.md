@@ -1,326 +1,206 @@
-🚀 DO Secure AI Lab
-Overview
+# AI SOC Assistant Lab
 
-This project is a production-style Cloud Security & AI lab environment built on 
-DigitalOcean using:
+A private cloud security lab focused on building an **AI-powered cybersecurity assistant** for real SOC analyst workflows.
 
-Terraform (Infrastructure as Code)
+This project combines **cloud infrastructure, security hardening, automation, and AI services** to create a platform that assists with:
 
-Secure Bastion Architecture
+- Alert triage
+- MITRE ATT&CK mapping
+- IOC extraction
+- Investigation guidance
+- Case note generation
+- Detection engineering support
 
-Private VPC Networking
+The goal is to develop a **practical AI security copilot** that can assist with day-to-day cybersecurity analyst tasks.
 
-Cloud Firewalls (Least Privilege)
+---
 
-SSH Agent Forwarding
+# Architecture
 
-Ubuntu 22.04
+The lab runs in **DigitalOcean** with a segmented VPC architecture.
 
-Portfolio-ready Security Engineering practices
-
-The lab is designed to simulate a realistic cloud security environment suitable for:
-
-SOC workflows
-
-Detection engineering
-
-Secure infrastructure design
-
-AI-assisted security tooling
-
-Automation-first DevSecOps practices
-
-🏗 Architecture
-
-MacBook (Terraform Control Plane)
-        │
-        │ SSH (Agent Forwarding)
-        ▼
-Bastion Host (Public Entry Point)
-        │
-        │ Private VPC Network (10.20.0.0/16)
-        ▼
- ├── web-1 (10.20.0.10)
- ├── web-2 (10.20.0.11)
- └── ai-node (10.20.0.13)
-
-Key Design Principles
-
-🔒 Bastion is the ONLY public entry point
-
-🔒 Web and AI nodes are private-only
-
-🔒 DigitalOcean Cloud Firewalls enforce least privilege
-
-🔒 No private keys stored on servers
-
-🔒 SSH agent forwarding used for secure access
-
-🔒 Infrastructure managed entirely via Terraform
-
-☁ Infrastructure Components
-1️⃣ VPC
-
-CIDR: 10.20.0.0/16
-
-Region: nyc3
-
-Isolated private networking
-
-2️⃣ Bastion Host
-
-Ubuntu 22.04
-
-Public IP
-
-SSH hardened
-
-UFW enabled
-
-Fail2Ban configured
-
-Root login disabled
-
-Password authentication disabled
-
-SSH agent forwarding enabled
-
-3️⃣ Private Nodes
-
-web-1
-
-web-2
-
-ai-node
-
-Private-only IPs
-
-Accessible only via bastion
-
-4️⃣ Firewalls
-Bastion Firewall
-
-Allows SSH from trusted public IP only
-
-Private Firewall
-
-Allows SSH only from bastion (via tag-based rule)
-
-Allows internal VPC traffic
-
-Outbound allowed
-
-🛠 Terraform Structure
-
-Key Design Principles
-
-🔒 Bastion is the ONLY public entry point
-
-🔒 Web and AI nodes are private-only
-
-🔒 DigitalOcean Cloud Firewalls enforce least privilege
-
-🔒 No private keys stored on servers
-
-🔒 SSH agent forwarding used for secure access
-
-🔒 Infrastructure managed entirely via Terraform
-
-☁ Infrastructure Components
-1️⃣ VPC
-
-CIDR: 10.20.0.0/16
-
-Region: nyc3
-
-Isolated private networking
-
-2️⃣ Bastion Host
-
-Ubuntu 22.04
-
-Public IP
-
-SSH hardened
-
-UFW enabled
-
-Fail2Ban configured
-
-Root login disabled
-
-Password authentication disabled
-
-SSH agent forwarding enabled
-
-3️⃣ Private Nodes
-
-web-1
-
-web-2
-
-ai-node
-
-Private-only IPs
-
-Accessible only via bastion
-
-4️⃣ Firewalls
-Bastion Firewall
-
-Allows SSH from trusted public IP only
-
-Private Firewall
-
-Allows SSH only from bastion (via tag-based rule)
-
-Allows internal VPC traffic
-
-Outbound allowed
-
-🛠 Terraform Structure
-
-terraform/
-├── providers.tf
-├── variables.tf
-├── main.tf
-├── firewall.tf
-├── outputs.tf
-├── terraform.tfvars.example
-
-Sensitive values are excluded from version control.
-
-🔐 Security Controls Implemented
-
-SSH key-only authentication
-
-Root SSH disabled
-
-Password authentication disabled
-
-UFW host firewall enabled
-
-Fail2Ban brute-force protection
-
-Cloud firewall segmentation
-
-VPC network isolation
-
-Bastion-only ingress model
-
-SSH agent forwarding (no key storage on bastion)
-
-🧠 Control Plane Design
-
-Terraform runs from a dedicated control workstation (MacBook), not from infrastructure 
-nodes.
-
-This ensures:
-
-Clean separation of control plane and infrastructure
-
-Replaceable bastion
-
-IaC state integrity
-
-Professional engineering workflow
-
-📈 Current Status
-
-✅ VPC created
-✅ 4-node architecture deployed
-✅ Cloud firewalls configured
-✅ Bastion hardened
-✅ SSH agent forwarding configured
-✅ Secure private-node access working
-✅ GitHub repository initialized
-
-🔜 Next Phases
-
-Ansible bootstrap for private nodes
-
-Standardized hardening across all hosts
-
-AI SOC Assistant deployment
-
-FastAPI-based alert analysis API
-
-Structured JSON security responses
-
-Detection engineering integrations
-
-Optional Terraform remote state backend
-
-🎯 Purpose
-
-This lab demonstrates real-world cloud security engineering practices, including:
-
-Secure architecture design
-
-Infrastructure as Code discipline
-
-Network segmentation
-
-Identity and access management
-
-Automation-first security operations
-
-Foundation for AI-assisted SOC tooling
-
-Phase 2 – Bastion Control Plane & Node Hardening
-Architecture
-
-Bastion: Public entry point
-
-Web-1, Web-2: Private nodes
-
-AI Node: Private SOC automation host
+Windows Desktop
+│
+▼
+Bastion (Control Plane / SOC CLI)
+│
+│ Internal VPC
+▼
+AI Node (SOC Assistant API)
+│
+├── Web-1 (telemetry / workload node)
+└── Web-2 (telemetry / attack simulation node)
 
 VPC CIDR: 10.20.0.0/16
 
-Security Controls Implemented
+Hosts:
 
-Dedicated Bastion automation SSH key
+| Host | Role |
+|-----|-----|
+| Bastion | Public entry point, Ansible control node, SOC CLI host |
+| Web-1 | Private workload node |
+| Web-2 | Private workload / attack simulation node |
+| AI Node | Internal SOC Assistant API |
 
-Ansible managed infrastructure
+---
 
-Non-root automation user (sysadmin)
+# Security Controls Implemented
 
-UFW host-level firewall
+The environment is hardened using several security best practices:
 
-Fail2ban intrusion protection
+- Bastion-only SSH access
+- Dedicated Bastion automation SSH key
+- Ansible managed infrastructure
+- Non-root automation user (`sysadmin`)
+- UFW host-level firewall
+- Fail2ban intrusion protection
+- Unattended security updates
+- SSH password authentication disabled
+- Root SSH login disabled (break-glass via DO console)
 
-Unattended security updates
+---
 
-SSH password authentication disabled
+# Operational Model
 
-Root SSH login disabled (break-glass via DO console)
+Access path: Windows → Bastion → Private Nodes
 
-Operational Model
+The Bastion host serves as the:
 
-Windows → Bastion → Private Nodes
+- management plane
+- Ansible automation controller
+- SOC CLI operator console
 
-Phase 3 — SOC Assistant (FastAPI)
+---
+
+# Phase 3 — SOC Assistant (FastAPI)
+
+The **AI Node** hosts an internal SOC assistant API built with FastAPI.
 
 Host: ai-node (10.20.0.13)
 
-Service: soc-assistant.service (systemd)
+Service: soc-assistant.service
 
-API: http://10.20.0.13:8000 (VPC-only; restricted by UFW)
+Runs as a **systemd service**.
 
-Endpoints:
+The API is **only reachable inside the VPC**.
 
-GET /health
+http://10.20.0.13:8000
 
-POST /triage (structured JSON)
+---
 
-Operations
+# API Endpoints
 
-Status: sudo systemctl status soc-assistant --no-pager
+### Health Check
 
-Logs: sudo journalctl -u soc-assistant -n 50 --no-pager
+GET /heatlh
+Example:  curl http://10.20.0.13:8000/health
 
-Restart: sudo systemctl restart soc-assistant
+---
+
+### Alert Triage
+
+POST /triage
+
+The endpoint returns structured JSON including:
+
+- severity
+- confidence
+- summary
+- MITRE ATT&CK mapping
+- IOC candidates
+- recommended queries
+- recommended response actions
+
+Example request:
+
+```json
+{
+  "source": "wazuh",
+  "title": "Mimikatz credential dumping detected",
+  "raw_event": {
+    "user": "admin",
+    "process": "mimikatz.exe",
+    "src_ip": "192.168.1.22"
+  }
+}
+
+SOC CLI (Analyst Interface)
+
+The Bastion host runs a local CLI tool called soc which interacts with the SOC Assistant API.
+
+Example commands:
+soc health
+soc triage alert.json
+soc note alert.json
+soc triage-stdin
+
+Example workflow:
+cat alert.json | soc triage-stdin
+
+Output includes:
+
+severity
+
+MITRE ATT&CK mapping
+
+IOC extraction
+
+investigation queries
+
+recommended actions
+
+This simulates an internal SOC automation tool used by security teams.
+
+Check service status
+sudo systemctl status soc-assistant --no-pager
+
+View Logs
+sudo journalctl -u soc-assistant -n 50 --no-pager
+
+Restart Service
+sudo systemctl restart soc-assistant
+
+Project Goals
+
+This lab focuses on building an AI-powered cybersecurity assistant that helps analysts:
+
+triage alerts faster
+
+understand suspicious activity
+
+map detections to MITRE ATT&CK
+
+generate investigation queries
+
+create case notes
+
+support detection engineering workflows
+
+Future enhancements will include LLM-based reasoning and RAG knowledge retrieval.
+
+Future Roadmap
+
+Planned improvements:
+
+SOC CLI enhancements
+
+soc explain
+
+soc hunt
+
+soc mitre
+
+Detection engineering assistant
+
+LLM-based alert analysis
+
+RAG integration with MITRE ATT&CK
+
+Automatic alert ingestion
+
+Wazuh integration
+
+Real telemetry from workload nodes
 
 🧑‍💻 Author
 
